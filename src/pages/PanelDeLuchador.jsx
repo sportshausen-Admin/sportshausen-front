@@ -149,20 +149,11 @@ const PanelDeLuchador = () => {
 
         {/* Ofertas de campeonatos */}
         <section>
-          <div className="flex items-center justify-between mb-6">
-            <div className="flex items-center gap-3">
-              <Trophy className="text-sportshausen-red" size={28} />
-              <h2 className="text-2xl md:text-3xl font-display font-bold text-sportshausen-dark">
-                Ofertas de Campeonatos Recientes
-              </h2>
-            </div>
-            <button
-              onClick={() => navigate('/not-found')}
-              className="hidden sm:inline-flex items-center gap-1 text-sm font-semibold text-sportshausen-red hover:text-red-700"
-            >
-              Ver todas
-              <ArrowRight size={16} />
-            </button>
+          <div className="flex items-center gap-3 mb-6">
+            <Trophy className="text-sportshausen-red" size={28} />
+            <h2 className="text-2xl md:text-3xl font-display font-bold text-sportshausen-dark">
+              Ofertas de Campeonatos Recientes
+            </h2>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -205,12 +196,9 @@ const PanelDeLuchador = () => {
                   </div>
                 </div>
 
-                <button
-                  onClick={() => navigate('/not-found')}
-                  className="w-full px-4 py-2.5 bg-sportshausen-red text-white font-semibold rounded-lg hover:bg-red-700 transition-colors"
-                >
-                  Postularme
-                </button>
+                <span className="w-full flex items-center justify-center px-4 py-2.5 bg-gray-100 text-gray-500 font-semibold rounded-lg text-sm cursor-default select-none">
+                  Postulaciones — Próximamente
+                </span>
               </article>
             ))}
           </div>
@@ -218,20 +206,11 @@ const PanelDeLuchador = () => {
 
         {/* Agrupaciones recomendadas */}
         <section>
-          <div className="flex items-center justify-between mb-6">
-            <div className="flex items-center gap-3">
-              <Award className="text-sportshausen-red" size={28} />
-              <h2 className="text-2xl md:text-3xl font-display font-bold text-sportshausen-dark">
-                Agrupaciones Recomendadas
-              </h2>
-            </div>
-            <button
-              onClick={() => navigate('/not-found')}
-              className="hidden sm:inline-flex items-center gap-1 text-sm font-semibold text-sportshausen-red hover:text-red-700"
-            >
-              Explorar más
-              <ArrowRight size={16} />
-            </button>
+          <div className="flex items-center gap-3 mb-6">
+            <Award className="text-sportshausen-red" size={28} />
+            <h2 className="text-2xl md:text-3xl font-display font-bold text-sportshausen-dark">
+              Agrupaciones Recomendadas
+            </h2>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -266,12 +245,9 @@ const PanelDeLuchador = () => {
                   </span>
                 </div>
 
-                <button
-                  onClick={() => navigate('/not-found')}
-                  className="w-full px-4 py-2.5 border-2 border-sportshausen-red text-sportshausen-red font-semibold rounded-lg hover:bg-sportshausen-red hover:text-white transition-colors"
-                >
-                  Ver agrupación
-                </button>
+                <span className="w-full flex items-center justify-center px-4 py-2.5 bg-gray-100 text-gray-500 font-semibold rounded-lg text-sm cursor-default select-none">
+                  Perfil — Próximamente
+                </span>
               </article>
             ))}
           </div>
@@ -279,20 +255,11 @@ const PanelDeLuchador = () => {
 
         {/* Bookers recomendados */}
         <section>
-          <div className="flex items-center justify-between mb-6">
-            <div className="flex items-center gap-3">
-              <Briefcase className="text-sportshausen-red" size={28} />
-              <h2 className="text-2xl md:text-3xl font-display font-bold text-sportshausen-dark">
-                Bookers Recomendados
-              </h2>
-            </div>
-            <button
-              onClick={() => navigate('/not-found')}
-              className="hidden sm:inline-flex items-center gap-1 text-sm font-semibold text-sportshausen-red hover:text-red-700"
-            >
-              Ver todos
-              <ArrowRight size={16} />
-            </button>
+          <div className="flex items-center gap-3 mb-6">
+            <Briefcase className="text-sportshausen-red" size={28} />
+            <h2 className="text-2xl md:text-3xl font-display font-bold text-sportshausen-dark">
+              Bookers Recomendados
+            </h2>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -321,12 +288,9 @@ const PanelDeLuchador = () => {
                   </div>
                 </div>
 
-                <button
-                  onClick={() => navigate('/not-found')}
-                  className="w-full mt-auto px-4 py-2.5 bg-sportshausen-dark text-white font-semibold rounded-lg hover:bg-black transition-colors"
-                >
-                  Contactar
-                </button>
+                <span className="w-full mt-auto flex items-center justify-center px-4 py-2.5 bg-gray-100 text-gray-500 font-semibold rounded-lg text-sm cursor-default select-none">
+                  Contacto — Próximamente
+                </span>
               </article>
             ))}
           </div>

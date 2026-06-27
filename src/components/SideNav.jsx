@@ -1,22 +1,25 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import { Home, User, Calendar, MapPin, Briefcase, ClipboardList, MessageSquare, Bell, Ticket, LogOut } from 'lucide-react';
+import { useAuth } from '../context/AuthContext';
 
 const SideNav = ({ active, onSelect, isOpen = false, setIsOpen }) => {
   const authed = typeof window !== 'undefined' && !!localStorage.getItem('authToken');
   if (!authed) return null;
   const navigate = useNavigate();
+  const { logout } = useAuth();
   const userType = typeof window !== 'undefined' ? localStorage.getItem('userType') : null;
   const allItems = [
-    { id: 'home',                label: 'Inicio',             icon: '🏠', roles: ['luchador', 'agrupacion', 'booker'] },
-    { id: 'profile',             label: 'Mi perfil',          icon: '👤', roles: ['luchador', 'agrupacion', 'booker'] },
-    { id: 'calendar',            label: 'Calendario',         icon: '📅', roles: ['luchador', 'agrupacion'] },
-    { id: 'events',              label: 'Eventos',            icon: '📌', roles: ['luchador', 'agrupacion'] },
-    { id: 'offers',              label: 'Ofertas',            icon: '💼', roles: ['luchador'] },
-    { id: 'postulaciones',       label: 'Postulaciones',      icon: '📋', roles: ['agrupacion'] },
-    { id: 'messages',            label: 'Mensajes',           icon: '💬', roles: ['luchador', 'agrupacion', 'booker'] },
-    { id: 'notifications',       label: 'Notificaciones',     icon: '🔔', roles: ['luchador', 'agrupacion', 'booker'] },
-    { id: 'tickets',             label: 'Mis Tickets',        icon: '🎫', roles: ['luchador'] },
-    { id: 'tickets-agrupacion',  label: 'Gestionar Tickets',  icon: '🎫', roles: ['agrupacion'] },
+    { id: 'home',                label: 'Inicio',             icon: Home,          roles: ['luchador', 'agrupacion', 'booker'] },
+    { id: 'profile',             label: 'Mi perfil',          icon: User,          roles: ['luchador', 'agrupacion', 'booker'] },
+    { id: 'calendar',            label: 'Calendario',         icon: Calendar,      roles: ['luchador', 'agrupacion'] },
+    { id: 'events',              label: 'Eventos',            icon: MapPin,        roles: ['luchador', 'agrupacion'] },
+    { id: 'offers',              label: 'Ofertas',            icon: Briefcase,     roles: ['luchador'] },
+    { id: 'postulaciones',       label: 'Postulaciones',      icon: ClipboardList, roles: ['agrupacion'] },
+    { id: 'messages',            label: 'Mensajes',           icon: MessageSquare, roles: ['luchador', 'agrupacion', 'booker'] },
+    { id: 'notifications',       label: 'Notificaciones',     icon: Bell,          roles: ['luchador', 'agrupacion', 'booker'] },
+    { id: 'tickets',             label: 'Mis Tickets',        icon: Ticket,        roles: ['luchador'] },
+    { id: 'tickets-agrupacion',  label: 'Gestionar Tickets',  icon: Ticket,        roles: ['agrupacion'] },
   ];
 
   const items = allItems.filter(item => !userType || item.roles.includes(userType));
@@ -46,19 +49,27 @@ const SideNav = ({ active, onSelect, isOpen = false, setIsOpen }) => {
     if (onSelect) onSelect(id);
   };
 
-  const NavItem = ({ item, onClick }) => (
-    <button
-      onClick={() => onClick(item.id)}
-      className={`w-full text-left px-4 py-3 rounded-lg font-semibold transition-colors ${
-        active === item.id
-          ? 'bg-sporthausen-primary text-white shadow-sm'
-          : 'text-sporthausen-neutral-dark hover:bg-sporthausen-neutral-light hover:text-sporthausen-primary'
-      }`}
-    >
-      <span className="mr-2">{item.icon}</span>
-      {item.label}
-    </button>
-  );
+  const handleLogout = async () => {
+    try { await logout(); } catch (e) {}
+    window.location.href = '/';
+  };
+
+  const NavItem = ({ item, onClick }) => {
+    const Icon = item.icon;
+    return (
+      <button
+        onClick={() => onClick(item.id)}
+        className={`w-full text-left px-4 py-3 rounded-lg font-semibold transition-colors flex items-center gap-3 ${
+          active === item.id
+            ? 'bg-sporthausen-primary text-white shadow-sm'
+            : 'text-sporthausen-neutral-dark hover:bg-sporthausen-neutral-light hover:text-sporthausen-primary'
+        }`}
+      >
+        <Icon size={18} />
+        {item.label}
+      </button>
+    );
+  };
 
   return (
     <>
@@ -78,25 +89,37 @@ const SideNav = ({ active, onSelect, isOpen = false, setIsOpen }) => {
             className="absolute inset-0 bg-sporthausen-primary/60 backdrop-blur-sm"
             onClick={() => setIsOpen && setIsOpen(false)}
           />
-          <div className="absolute left-0 top-0 bottom-0 w-64 bg-sporthausen-neutral-light p-4 shadow-xl overflow-y-auto">
-            <div className="pt-4 space-y-1">
-              {items.map(item => (
-                <button
-                  key={item.id}
-                  onClick={() => {
-                    handleClick(item.id);
-                    setIsOpen && setIsOpen(false);
-                  }}
-                  className={`w-full text-left px-4 py-3 rounded-lg font-semibold transition-colors ${
-                    active === item.id
-                      ? 'bg-sporthausen-primary text-white shadow-sm'
-                      : 'text-sporthausen-neutral-dark hover:bg-white hover:text-sporthausen-primary'
-                  }`}
-                >
-                  <span className="mr-2">{item.icon}</span>
-                  {item.label}
-                </button>
-              ))}
+          <div className="absolute left-0 top-0 bottom-0 w-64 bg-sporthausen-neutral-light p-4 shadow-xl overflow-y-auto flex flex-col">
+            <div className="pt-4 space-y-1 flex-1">
+              {items.map(item => {
+                const Icon = item.icon;
+                return (
+                  <button
+                    key={item.id}
+                    onClick={() => {
+                      handleClick(item.id);
+                      setIsOpen && setIsOpen(false);
+                    }}
+                    className={`w-full text-left px-4 py-3 rounded-lg font-semibold transition-colors flex items-center gap-3 ${
+                      active === item.id
+                        ? 'bg-sporthausen-primary text-white shadow-sm'
+                        : 'text-sporthausen-neutral-dark hover:bg-white hover:text-sporthausen-primary'
+                    }`}
+                  >
+                    <Icon size={18} />
+                    {item.label}
+                  </button>
+                );
+              })}
+            </div>
+            <div className="border-t border-slate-200 pt-3 mt-3">
+              <button
+                onClick={handleLogout}
+                className="w-full text-left px-4 py-3 rounded-lg font-semibold transition-colors flex items-center gap-3 text-red-600 hover:bg-red-50"
+              >
+                <LogOut size={18} />
+                Cerrar sesión
+              </button>
             </div>
           </div>
         </div>

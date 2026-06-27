@@ -64,7 +64,7 @@ const LuchadorDashboard = () => {
                   <h2 className="text-2xl font-bold text-sportshausen-dark mb-4">Próxima Aparición</h2>
                   <p className="text-gray-700">FNL Doomsday, 23 de Mayo, 14:00 Hrs</p>
                   <div className="mt-4">
-                    <button onClick={() => navigate('/not-found')} className="btn-subtle">Ver Más</button>
+                    <button onClick={() => navigate('/mis-eventos')} className="btn-subtle">Ver Mis Eventos</button>
                   </div>
                 </div>
               </div>
@@ -111,7 +111,7 @@ const LuchadorDashboard = () => {
                   <h2 className="text-2xl font-bold text-sportshausen-dark mb-4">Ofertas</h2>
                   <p className="text-gray-700">Mira las últimas ofertas que han aparecido en el portal</p>
                   <div className="mt-4">
-                    <button onClick={() => navigate('/not-found')} className="btn-primary">Ir a Ofertas</button>
+                    <button onClick={() => navigate('/ofertas')} className="btn-primary">Ir a Ofertas</button>
                   </div>
                 </div>
               </div>
