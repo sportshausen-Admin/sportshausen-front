@@ -31,6 +31,18 @@ const apiCall = async (endpoint, options = {}) => {
     const response = await fetch(`${API_BASE_URL}${endpoint}`, requestOptions);
     const data = await response.json();
 
+    if (response.status === 401) {
+      // Token expirado o inválido — limpiar sesión y redirigir a login
+      localStorage.removeItem('authToken');
+      localStorage.removeItem('user');
+      localStorage.removeItem('userType');
+      localStorage.removeItem('userId');
+      localStorage.removeItem('sportshausen_notifs');
+      localStorage.removeItem('sportshausen_notifs_unread');
+      window.location.href = '/login';
+      return;
+    }
+
     if (!response.ok) {
       throw new Error(data.message || data.error || 'Error en la solicitud');
     }

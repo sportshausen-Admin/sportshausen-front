@@ -15,13 +15,15 @@ export const AuthProvider = ({ children }) => {
     const savedUser = localStorage.getItem('user');
     const savedUserType = localStorage.getItem('userType');
 
-    // Nuestro JWT tiene `xanoToken` en el payload.
-    // Si el token guardado no lo tiene, es un token antiguo de Xano → forzar re-login.
+    // Verificar que el token sea nuestro JWT (tiene xanoToken) y que no haya expirado.
     const isOurJWT = (() => {
       if (!savedToken) return false;
       try {
         const payload = JSON.parse(atob(savedToken.split('.')[1]));
-        return !!payload.xanoToken;
+        if (!payload.xanoToken) return false;
+        // exp está en segundos UNIX — rechazar si ya venció
+        if (payload.exp && payload.exp * 1000 < Date.now()) return false;
+        return true;
       } catch { return false; }
     })();
 
