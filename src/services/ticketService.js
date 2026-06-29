@@ -1,7 +1,7 @@
 const BASE = (import.meta.env.VITE_API_URL || 'http://localhost:3000/api').replace(/\/api$/, '');
 
 const headers = () => {
-  const token = localStorage.getItem('authToken');
+  const token = sessionStorage.getItem('authToken');
   const userId = localStorage.getItem('userId');
   const userType = localStorage.getItem('userType');
   return {

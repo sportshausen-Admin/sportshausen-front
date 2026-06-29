@@ -9,19 +9,20 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // Restaurar token y usuario al montar
   useEffect(() => {
-    const savedToken = localStorage.getItem('authToken');
+    // sessionStorage se limpia al cerrar el navegador
+    const savedToken = sessionStorage.getItem('authToken');
     const savedUser = localStorage.getItem('user');
     const savedUserType = localStorage.getItem('userType');
 
-    // Verificar que el token sea nuestro JWT (tiene xanoToken) y que no haya expirado.
+    // JWT usa base64url, no base64 estándar — hay que normalizar antes de atob()
     const isOurJWT = (() => {
       if (!savedToken) return false;
       try {
-        const payload = JSON.parse(atob(savedToken.split('.')[1]));
+        const b64 = savedToken.split('.')[1].replace(/-/g, '+').replace(/_/g, '/');
+        const padded = b64.padEnd(b64.length + (4 - b64.length % 4) % 4, '=');
+        const payload = JSON.parse(atob(padded));
         if (!payload.xanoToken) return false;
-        // exp está en segundos UNIX — rechazar si ya venció
         if (payload.exp && payload.exp * 1000 < Date.now()) return false;
         return true;
       } catch { return false; }
@@ -30,7 +31,7 @@ export const AuthProvider = ({ children }) => {
     if (isOurJWT) {
       setToken(savedToken);
     } else if (savedToken) {
-      localStorage.removeItem('authToken');
+      sessionStorage.removeItem('authToken');
       localStorage.removeItem('user');
       localStorage.removeItem('userType');
       localStorage.removeItem('userId');
@@ -38,9 +39,7 @@ export const AuthProvider = ({ children }) => {
 
     const normalizeUser = (u) => {
       if (!u) return u;
-      // Usar exclusivamente full_name cuando exista
-      const name = u.full_name || null;
-      return { ...u, displayName: name };
+      return { ...u, displayName: u.full_name || null };
     };
 
     if (savedUser) {
@@ -69,18 +68,15 @@ export const AuthProvider = ({ children }) => {
       const authToken = data.authToken || data.token;
       let userData = data.user || data;
 
-      // Normalizar role
       let userRole = userData.role || userData.tipo_usuario || userData.type || 'luchador';
       if (userRole === 'agrupación') userRole = 'agrupacion';
       if (!['booker', 'agrupacion', 'luchador'].includes(userRole)) userRole = 'luchador';
       userData.role = userRole;
 
-      // Limpiar notificaciones del usuario anterior antes de guardar el nuevo
       localStorage.removeItem('sportshausen_notifs');
       localStorage.removeItem('sportshausen_notifs_unread');
 
-      // Guardar mínimo y actualizar estado
-      localStorage.setItem('authToken', authToken);
+      sessionStorage.setItem('authToken', authToken);
       localStorage.setItem('user', JSON.stringify(userData));
       localStorage.setItem('userType', userRole);
       localStorage.setItem('userId', userData.id || userData.user_id);
@@ -88,7 +84,6 @@ export const AuthProvider = ({ children }) => {
       setToken(authToken);
       setUser(userData);
 
-      // Si no incluye full_name, solicitar profile al backend proxy
       try {
         const hasFullName = !!(userData.full_name);
         const uid = userData.id || userData.user_id || localStorage.getItem('userId');
@@ -130,7 +125,7 @@ export const AuthProvider = ({ children }) => {
       if (!['booker', 'agrupacion', 'luchador'].includes(userRole)) userRole = 'luchador';
       userData.role = userRole;
 
-      localStorage.setItem('authToken', authToken);
+      sessionStorage.setItem('authToken', authToken);
       localStorage.setItem('user', JSON.stringify(userData));
       localStorage.setItem('userType', userRole);
       localStorage.setItem('userId', userData.id || userData.user_id);
@@ -142,7 +137,7 @@ export const AuthProvider = ({ children }) => {
         const hasFullName = !!(userData.full_name);
         const uid = userData.id || userData.user_id || localStorage.getItem('userId');
         if (!hasFullName && uid) {
-          localStorage.setItem('authToken', authToken);
+          sessionStorage.setItem('authToken', authToken);
           const profileResp = await usersAPI.getProfileById(uid);
           const profileData = profileResp || {};
           if (profileData && profileData.full_name) {
@@ -171,7 +166,7 @@ export const AuthProvider = ({ children }) => {
     } catch (err) {
       console.error('Error during logout:', err);
     } finally {
-      localStorage.removeItem('authToken');
+      sessionStorage.removeItem('authToken');
       localStorage.removeItem('user');
       localStorage.removeItem('userType');
       localStorage.removeItem('userId');

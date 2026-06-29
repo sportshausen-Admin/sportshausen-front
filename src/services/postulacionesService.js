@@ -34,7 +34,6 @@ export const rechazarPostulacion = (id) => {
   return all.find(p => p.id === id);
 };
 
-// ── Notificaciones de agrupación ────────────────────────────────────────────
 const AGRUPACION_NOTIF_KEY = (id) => `sh_notificaciones_agrupacion_${id}`;
 
 export const agregarNotificacionAgrupacion = (agrupacionId, msg, extras = {}) => {
@@ -52,7 +51,6 @@ export const getNotificacionesAgrupacion = (agrupacionId) => {
   try { return JSON.parse(localStorage.getItem(key) || '[]'); } catch { return []; }
 };
 
-// ── Notificaciones del luchador ──────────────────────────────────────────────
 const NOTIF_KEY = 'sh_notificaciones_luchador';
 export const agregarNotificacionLuchador = (luchadorId, msg, extras = {}) => {
   const key = `${NOTIF_KEY}_${luchadorId}`;

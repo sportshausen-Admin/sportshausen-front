@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+﻿import React, { useState, useEffect } from 'react';
 import {
   ChevronLeft, ChevronRight, Calendar, Clock,
   Users, Trash2, Edit3, X, CheckCircle2, Plus, Check, AlertCircle,
@@ -13,9 +13,7 @@ import {
   eliminarEvento,
 } from '../services/eventosService';
 
-// ─────────────────────────────────────────
 //  Constantes
-// ─────────────────────────────────────────
 const MONTH_NAMES = [
   'Enero','Febrero','Marzo','Abril','Mayo','Junio',
   'Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre',
@@ -41,9 +39,7 @@ const calcHoraFin = (horaInicio, duracion) => {
   return `${String(fin).padStart(2, '0')}:00`;
 };
 
-// ─────────────────────────────────────────
 //  Sub-componentes reutilizables
-// ─────────────────────────────────────────
 function Overlay({ onClose, children }) {
   return (
     <div
@@ -93,9 +89,7 @@ function ResumenRow({ label, value }) {
   );
 }
 
-// ─────────────────────────────────────────
 //  Formulario de evento (crear / editar)
-// ─────────────────────────────────────────
 function EventoForm({ form, onChange, disabled }) {
   const horaFin = calcHoraFin(form.horaInicio, form.duracion);
   const horas   = getHorasDisponibles(form.duracion);
@@ -216,41 +210,37 @@ function EventoForm({ form, onChange, disabled }) {
   );
 }
 
-// ─────────────────────────────────────────
 //  Estado vacío del formulario
-// ─────────────────────────────────────────
 const FORM_EMPTY = { nombre: '', duracion: null, horaInicio: '', luchadores: null };
 
 const isFormValido = (f) =>
   f.nombre.trim() && f.duracion && f.horaInicio && f.luchadores &&
   !!calcHoraFin(f.horaInicio, f.duracion);
 
-// ─────────────────────────────────────────
 //  Componente principal
-// ─────────────────────────────────────────
 export default function AgendaAgrupacion() {
   const today = new Date();
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [month, setMonth] = useState(today.getMonth());
   const [year,  setYear]  = useState(today.getFullYear());
 
-  // ── Datos y estados de carga ──
+  // Datos y estados de carga
   const [eventos,   setEventos]   = useState([]);
   const [cargando,  setCargando]  = useState(true);
   const [guardando, setGuardando] = useState(false);
   const [errorApi,  setErrorApi]  = useState('');
 
-  // ── Modales ──
+  // Modales
   const [modalCrear,   setModalCrear]   = useState(null);
   const [modalExito,   setModalExito]   = useState(null);
   const [modalDetalle, setModalDetalle] = useState(null);
   const [modalEditar,  setModalEditar]  = useState(null);
 
-  // ── Formularios ──
+  // Formularios
   const [form,     setForm]     = useState(FORM_EMPTY);
   const [editForm, setEditForm] = useState(FORM_EMPTY);
 
-  // ── Carga inicial desde Xano ──
+  // Carga inicial desde Xano
   useEffect(() => {
     getEventos()
       .then(setEventos)
@@ -258,7 +248,7 @@ export default function AgendaAgrupacion() {
       .finally(() => setCargando(false));
   }, []);
 
-  // ── Navegación de mes ──
+  // Navegación de mes
   const prevMonth = () => {
     if (month === 0) { setMonth(11); setYear((y) => y - 1); }
     else setMonth((m) => m - 1);
@@ -268,7 +258,7 @@ export default function AgendaAgrupacion() {
     else setMonth((m) => m + 1);
   };
 
-  // ── Grilla del calendario ──
+  // Grilla del calendario
   const daysInMonth = new Date(year, month + 1, 0).getDate();
   const firstDay    = (new Date(year, month, 1).getDay() + 6) % 7;
   const calDays     = [
@@ -283,7 +273,7 @@ export default function AgendaAgrupacion() {
   const isToday = (d, m, y) =>
     d === today.getDate() && m === today.getMonth() && y === today.getFullYear();
 
-  // ── Clic en un día ──
+  // Clic en un día
   const handleDayClick = (date) => {
     const evento = getEvento(date, month, year);
     if (evento) {
@@ -294,7 +284,7 @@ export default function AgendaAgrupacion() {
     }
   };
 
-  // ── Crear evento → Xano POST ──
+  // Crear evento → Xano POST
   const handleCrear = async () => {
     if (!isFormValido(form)) return;
     setGuardando(true);
@@ -321,7 +311,7 @@ export default function AgendaAgrupacion() {
     }
   };
 
-  // ── Eliminar evento → Xano DELETE ──
+  // Eliminar evento → Xano DELETE
   const handleEliminar = async (id) => {
     setGuardando(true);
     setErrorApi('');
@@ -337,7 +327,7 @@ export default function AgendaAgrupacion() {
     }
   };
 
-  // ── Editar evento → Xano PUT ──
+  // Editar evento → Xano PUT
   const openEditar = (evento) => {
     setEditForm({
       nombre:     evento.nombre,
@@ -373,7 +363,7 @@ export default function AgendaAgrupacion() {
     }
   };
 
-  // ── Datos del sidebar ──
+  // Datos del sidebar
   const eventosEsteMes = eventos.filter(
     (e) => e.fecha.month === month && e.fecha.year === year
   );
@@ -395,7 +385,7 @@ export default function AgendaAgrupacion() {
     return `${fecha.date} de ${MONTH_NAMES[fecha.month]}${anio}`;
   };
 
-  // ─────────────────────────────────────────────────────────────────────────
+
   return (
     <div className="min-h-screen bg-sportshausen-light">
       <Header userType="agrupacion" isOpen={sidebarOpen} setIsOpen={setSidebarOpen} />
@@ -436,7 +426,7 @@ export default function AgendaAgrupacion() {
 
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
 
-            {/* ── GRILLA CALENDARIO ── */}
+            {/* GRILLA CALENDARIO */}
             <div className="lg:col-span-2 bg-white rounded-2xl shadow-sm p-6">
 
               {/* Navegación de mes */}
@@ -542,7 +532,7 @@ export default function AgendaAgrupacion() {
               </div>
             </div>
 
-            {/* ── SIDEBAR ── */}
+            {/* SIDEBAR */}
             <div className="space-y-4">
 
               {/* Estadísticas del mes */}

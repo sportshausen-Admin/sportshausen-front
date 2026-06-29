@@ -35,7 +35,7 @@ export const Header = ({ userType = 'guest', isOpen: propIsOpen, setIsOpen: prop
     window.addEventListener('notifs-updated', sync);
     return () => window.removeEventListener('notifs-updated', sync);
   }, []);
-  const authed = typeof window !== 'undefined' && !!localStorage.getItem('authToken');
+  const authed = typeof window !== 'undefined' && !!sessionStorage.getItem('authToken');
   // Show left drawer for authenticated users on app pages, but hide on landing and login
   const showLeftDrawer = authed && !['/', '/login'].includes(location.pathname);
   const userId = typeof window !== 'undefined' ? (localStorage.getItem('userId') || '1') : '1';
@@ -79,7 +79,7 @@ export const Header = ({ userType = 'guest', isOpen: propIsOpen, setIsOpen: prop
             </button>
             <button onClick={() => {
               try {
-                const authed = !!localStorage.getItem('authToken');
+                const authed = !!sessionStorage.getItem('authToken');
                 if (authed) {
                   if (userTypeStored === 'luchador') navigate('/panel/luchador');
                   else if (userTypeStored === 'agrupacion') navigate('/dashboard/agrupacion');

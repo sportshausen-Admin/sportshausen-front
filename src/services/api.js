@@ -16,8 +16,8 @@ const apiCall = async (endpoint, options = {}) => {
     },
   };
 
-  // Agregar token si existe
-  const token = localStorage.getItem('authToken');
+  // Token en sessionStorage — expira al cerrar el navegador
+  const token = sessionStorage.getItem('authToken');
   if (token) {
     requestOptions.headers.Authorization = `Bearer ${token}`;
   }
@@ -33,7 +33,7 @@ const apiCall = async (endpoint, options = {}) => {
 
     if (response.status === 401) {
       // Token expirado o inválido — limpiar sesión y redirigir a login
-      localStorage.removeItem('authToken');
+      sessionStorage.removeItem('authToken');
       localStorage.removeItem('user');
       localStorage.removeItem('userType');
       localStorage.removeItem('userId');

@@ -4,7 +4,7 @@ import { Home, User, Calendar, MapPin, Briefcase, ClipboardList, MessageSquare, 
 import { useAuth } from '../context/AuthContext';
 
 const SideNav = ({ active, onSelect, isOpen = false, setIsOpen }) => {
-  const authed = typeof window !== 'undefined' && !!localStorage.getItem('authToken');
+  const authed = typeof window !== 'undefined' && !!sessionStorage.getItem('authToken');
   if (!authed) return null;
   const navigate = useNavigate();
   const { logout } = useAuth();

@@ -3,7 +3,7 @@ import { Mail, Phone } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 export const Footer = ({ withSidebar }) => {
-  const authed = typeof window !== 'undefined' && !!localStorage.getItem('authToken');
+  const authed = typeof window !== 'undefined' && !!sessionStorage.getItem('authToken');
   const hasSidebar = withSidebar ?? authed;
   const userType = typeof window !== 'undefined' ? localStorage.getItem('userType') : null;
 

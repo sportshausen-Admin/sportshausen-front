@@ -1,7 +1,7 @@
 const BASE = (import.meta.env.VITE_API_URL || 'http://localhost:3000/api').replace(/\/api$/, '');
 
 const authHeader = () => {
-  const token = localStorage.getItem('authToken');
+  const token = sessionStorage.getItem('authToken');
   return token ? { Authorization: `Bearer ${token}` } : {};
 };
 
@@ -19,8 +19,7 @@ const http = async (path, options = {}) => {
   return text ? JSON.parse(text) : null;
 };
 
-// ── Conversión de fecha ──────────────────────────────────────────────────────
-
+// Xano guarda fechas como timestamp en ms; nosotros usamos {date, month, year}
 const fechaObjToMs = ({ date, month, year }) =>
   new Date(year, month, date, 12, 0, 0).getTime();
 
@@ -29,7 +28,6 @@ const msToFechaObj = (ms) => {
   return { date: d.getDate(), month: d.getMonth(), year: d.getFullYear() };
 };
 
-// ── Mapeo de campos ──────────────────────────────────────────────────────────
 
 const fromXano = (r) => ({
   id:            r.id,
@@ -57,8 +55,6 @@ const toXano = (ev) => ({
   fecha:         fechaObjToMs(ev.fecha),
   agrupacion_id: getAgrupacionId(),
 });
-
-// ── Endpoints ────────────────────────────────────────────────────────────────
 
 export const getEventos = () =>
   http('').then((data) => {

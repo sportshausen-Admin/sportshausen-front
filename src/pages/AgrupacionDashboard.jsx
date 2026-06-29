@@ -15,7 +15,7 @@ import {
 const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:3000';
 const registrarMarcaCalendario = async (luchador_id, fechaStr, razon) => {
   try {
-    const token = localStorage.getItem('authToken');
+    const token = sessionStorage.getItem('authToken');
     await fetch(`${API_BASE}/api/disponibilidad/pendientes`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },

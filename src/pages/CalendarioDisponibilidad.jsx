@@ -6,7 +6,7 @@ import { getFechas, upsertFecha, deleteFecha } from '../services/disponibilidadS
 
 const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:3000';
 const fetchMarcasPendientes = async () => {
-  const token = localStorage.getItem('authToken');
+  const token = sessionStorage.getItem('authToken');
   const res = await fetch(`${API_BASE}/api/disponibilidad/pendientes`, {
     headers: { Authorization: `Bearer ${token}` },
   });
